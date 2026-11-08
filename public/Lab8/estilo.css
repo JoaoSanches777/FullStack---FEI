@@ -1,0 +1,37 @@
+body {
+    background-color: #0F172A;
+    color: #F1F5F9;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.caixa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    border: 1px solid #334155;
+    background-color: #1E293B;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+a {
+    color: #F1F5F9;
+}
+
+.sucesso {
+    color: lightgreen;
+}
+
+.erro {
+    color: tomato;
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Resposta</title>
+    <link href="/Lab8/estilo.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="caixa">
+        <h1>Resposta para o usuário:</h1>
+        <% if (sucesso) { %>
+            <p class="sucesso"><%= status %></p>
+        <% } else { %>
+            <p class="erro"><%= status %></p>
+        <% } %>
+        <p>Login: <%= login %></p>
+        <a href="/login">Ir para o login</a>
+        <a href="/cadastra">Ir para o cadastro</a>
+    </div>
+</body>
+
+</html>
