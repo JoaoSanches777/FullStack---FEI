@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <link rel="stylesheet" href="Canvas.css">
+</head>
+
+<body>
+    <div class="conteudo">
+        <canvas id="meuCanvas" width="300" height="300"></canvas>
+        <a href="../Aula2/projects.html">Voltar para Projetos</a>
+    </div>
+
+    <script>
+        let canvas = document.getElementById("meuCanvas");
+        let ctx = canvas.getContext("2d");
+
+        function desenhar_quadrado(x, y, largura, altura, cor) {
+            ctx.beginPath();
+            ctx.fillStyle = cor;
+            ctx.fillRect(x, y, largura, altura);
+            ctx.closePath();
+        }
+
+        function desenhar_linha(x1, y1, x2, y2, cor) {
+            ctx.beginPath();
+            ctx.strokeStyle = cor;
+            ctx.lineWidth = 1;
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        function desenhar_arco(x, y, raio, inicio, fim, cor_linha, cor_preenchimento) {
+            ctx.beginPath();
+            ctx.strokeStyle = cor_linha;
+            ctx.lineWidth = 1;
+            ctx.arc(x, y, raio, inicio, fim);
+            if (cor_preenchimento) {
+                ctx.fillStyle = cor_preenchimento;
+                ctx.fill();
+            }
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        function escrever(texto, x, y, cor) {
+            ctx.beginPath();
+            ctx.fillStyle = cor;
+            ctx.font = "20px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText(texto, x, y);
+            ctx.closePath();
+        }
+
+        function desenhar_triangulo(x1, y1, x2, y2, x3, y3, cor) {
+            ctx.beginPath();
+            ctx.fillStyle = cor;
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.lineTo(x3, y3);
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // O modelo tem 400 x 400, o canvas tem 300 x 300
+        ctx.scale(0.75, 0.75);
+
+        // Ceu
+        desenhar_quadrado(0, 0, 400, 400, "#8fffd6");
+
+        // Sol
+        desenhar_arco(300, 100, 50, 0, 2 * Math.PI, "#ffff33", "#ffff33");
+
+        // Chao
+        desenhar_quadrado(0, 300, 400, 100, "gray");
+
+        // Rio
+        desenhar_arco(0, 300, 50, Math.PI, 2 * Math.PI, "#4a90ff", "#4a90ff");
+        desenhar_quadrado(0, 300, 50, 100, "#4a90ff");
+        desenhar_quadrado(0, 350, 150, 50, "#4a90ff");
+        desenhar_arco(150, 400, 50, Math.PI, 2 * Math.PI, "#4a90ff", "#4a90ff");
+
+        // Casa
+        desenhar_quadrado(150, 200, 100, 100, "#8b4513");
+        desenhar_triangulo(150, 200, 200, 150, 250, 200, "#f76b50");
+        desenhar_linha(150, 200, 200, 150, "#8b4513");
+        desenhar_linha(200, 150, 250, 200, "#8b4513");
+        desenhar_quadrado(160, 220, 30, 30, "#4fc3f7");
+        desenhar_quadrado(210, 220, 30, 30, "#4fc3f7");
+        desenhar_quadrado(190, 250, 20, 50, "#6b4423");
+
+        // Arvore da esquerda
+        desenhar_quadrado(50, 250, 20, 50, "#8b4513");
+        desenhar_arco(60, 230, 30, 0, 2 * Math.PI, "#2e8b2e", "#2e8b2e");
+
+        // Arvore da direita
+        desenhar_quadrado(350, 300, 20, 50, "#8b4513");
+        desenhar_arco(360, 280, 30, 0, 2 * Math.PI, "#2e8b2e", "#2e8b2e");
+
+        // Linha do chao
+        desenhar_linha(50, 300, 400, 300, "#555555");
+
+    </script>
+</body>
+
+</html>

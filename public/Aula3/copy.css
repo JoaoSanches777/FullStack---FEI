@@ -1,0 +1,118 @@
+body {
+    background-color: lightgray;
+}
+
+/* Topo */
+.topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: bisque;
+    border: 3px solid navy;
+    padding: 25px;
+}
+
+.topo h1 {
+    color: darkgreen;
+    font-size: 45px;
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+    gap: 120px;
+    background-color: lightskyblue;
+    padding: 15px;
+}
+
+.menu a {
+    color: darkred;
+    font-weight: bold;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+/* Meio */
+h2 {
+    text-align: center;
+}
+
+p {
+    color: indigo;
+    font-family: SansSerif;
+    font-size: 20pt;
+    text-align: center;
+}
+
+.livros,
+.videos {
+    display: flex;
+    justify-content: center;
+    gap: 85px;
+    margin-bottom: 70px;
+}
+
+.livros img {
+    height: 330px;
+}
+
+.videos iframe {
+    width: 330px;
+    height: 330px;
+    border: 0;
+}
+
+/* Base */
+table {
+    margin: 0 auto 50px auto;
+    border: 3px dashed red;
+    font-size: 13px;
+}
+
+th {
+    color: red;
+}
+
+th,
+td {
+    border: 1px solid darkred;
+    padding: 8px;
+    text-align: center;
+}
+
+.sites {
+    width: 435px;
+    margin: 0 auto 20px auto;
+    background-color: yellow;
+    font-size: 13px;
+    padding-bottom: 10px;
+}
+
+.sites ul {
+    margin: 10px 0 0 0;
+}
+
+.sites a {
+    color: darkred;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 50px;
+}
+
+.rodape {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: bisque;
+    padding: 10px 20px;
+}
+
+.rodape img {
+    height: 100px;
+}
+
+.rodape p {
+    color: black;
+    font-family: 'Comic Sans MS', cursive;
+    font-size: 15pt;
+}
