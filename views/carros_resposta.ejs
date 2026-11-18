@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Resposta</title>
+    <link href="/Lab10/carros.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="conteudo">
+        <div class="caixa">
+            <h1>Resposta</h1>
+            <% if (sucesso) { %>
+                <p class="sucesso"><%= mensagem %></p>
+            <% } else { %>
+                <p class="erro"><%= mensagem %></p>
+            <% } %>
+            <div class="menu">
+                <a href="/carros">Carros disponíveis</a>
+                <a href="/carros/gerenciar">Gerência</a>
+                <a href="/carros/login">Login</a>
+                <a href="/carros/cadastro">Cadastro</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

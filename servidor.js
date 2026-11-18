@@ -13,6 +13,11 @@ const client = new MongoClient(uri, { useNewUrlParser: true });
 var dbo = client.db("blog");
 var posts = dbo.collection("posts");
 
+// Lab 10 - banco da loja de carros
+var dbCarros = client.db("loja_carros");
+var colecaoUsuarios = dbCarros.collection("usuarios");
+var colecaoCarros = dbCarros.collection("carros");
+
 var app = express();
 app.use(express.static('./public'));
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -100,6 +105,185 @@ app.post('/cadastrar_post', function (requisicao, resposta) {
             resposta.render('blog', { posts: [], erro: 'Erro ao cadastrar o post!' })
         } else {
             resposta.redirect('/blog')
+        }
+    });
+})
+
+// Lab 10 - Loja de carros
+
+function respostaCarros(resposta, mensagem, sucesso) {
+    resposta.render('carros_resposta', { mensagem, sucesso })
+}
+
+// Confere se o id recebido do formulario e um id valido do MongoDB
+function idValido(id) {
+    return mongodb.ObjectId.isValid(id) && String(new mongodb.ObjectId(id)) == id
+}
+
+// Pagina de listagem dos carros disponiveis
+app.get('/carros', function (requisicao, resposta) {
+    colecaoCarros.find({}).toArray(function (err, items) {
+        if (err) {
+            console.log(err);
+            respostaCarros(resposta, 'Erro ao buscar os carros!', false)
+        } else {
+            resposta.render('carros_lista', { carros: items })
+        }
+    });
+})
+
+// Cadastro de usuario
+app.get('/carros/cadastro', function (requisicao, resposta) {
+    resposta.redirect('/Lab10/cadastro.html')
+})
+
+app.post('/carros/cadastrar_usuario', function (requisicao, resposta) {
+    var nome = requisicao.body.nome;
+    var login = requisicao.body.login;
+    var senha = requisicao.body.senha;
+
+    if (!nome || !login || !senha) {
+        return respostaCarros(resposta, 'Preencha todos os campos!', false)
+    }
+
+    colecaoUsuarios.find({ login: login }).toArray(function (err, items) {
+        if (err) {
+            console.log(err);
+            respostaCarros(resposta, 'Erro ao cadastrar usuário!', false)
+        } else if (items.length > 0) {
+            respostaCarros(resposta, 'Este login já está cadastrado!', false)
+        } else {
+            var data = { nome: nome, login: login, senha: senha };
+            colecaoUsuarios.insertOne(data, function (err) {
+                if (err) {
+                    console.log(err);
+                    respostaCarros(resposta, 'Erro ao cadastrar usuário!', false)
+                } else {
+                    respostaCarros(resposta, 'Usuário ' + nome + ' cadastrado com sucesso!', true)
+                }
+            });
+        }
+    });
+})
+
+// Login de usuario
+app.get('/carros/login', function (requisicao, resposta) {
+    resposta.redirect('/Lab10/login.html')
+})
+
+app.post('/carros/logar', function (requisicao, resposta) {
+    var data = { login: requisicao.body.login, senha: requisicao.body.senha };
+    colecaoUsuarios.find(data).toArray(function (err, items) {
+        if (err) {
+            console.log(err);
+            respostaCarros(resposta, 'Erro ao fazer login!', false)
+        } else if (items.length == 0) {
+            respostaCarros(resposta, 'Login ou senha incorretos!', false)
+        } else {
+            resposta.redirect('/carros/gerenciar')
+        }
+    });
+})
+
+// Pagina de gerencia dos carros
+app.get('/carros/gerenciar', function (requisicao, resposta) {
+    colecaoCarros.find({}).toArray(function (err, items) {
+        if (err) {
+            console.log(err);
+            respostaCarros(resposta, 'Erro ao buscar os carros!', false)
+        } else {
+            resposta.render('carros_gerencia', { carros: items })
+        }
+    });
+})
+
+// Create - cadastrar novo carro
+app.post('/carros/cadastrar', function (requisicao, resposta) {
+    var data = {
+        marca: requisicao.body.marca,
+        modelo: requisicao.body.modelo,
+        ano: parseInt(requisicao.body.ano),
+        qtde_disponivel: parseInt(requisicao.body.qtde_disponivel)
+    };
+
+    if (!data.marca || !data.modelo || isNaN(data.ano) || isNaN(data.qtde_disponivel) || data.qtde_disponivel < 0) {
+        return respostaCarros(resposta, 'Preencha todos os campos corretamente!', false)
+    }
+
+    colecaoCarros.insertOne(data, function (err) {
+        if (err) {
+            console.log(err);
+            respostaCarros(resposta, 'Erro ao cadastrar o carro!', false)
+        } else {
+            respostaCarros(resposta, 'Carro ' + data.marca + ' ' + data.modelo + ' cadastrado com sucesso!', true)
+        }
+    });
+})
+
+// Update - atualizar carro
+app.post('/carros/atualizar', function (requisicao, resposta) {
+    if (!idValido(requisicao.body.id)) {
+        return respostaCarros(resposta, 'Carro não encontrado!', false)
+    }
+    var data = { _id: new mongodb.ObjectId(requisicao.body.id) };
+    var newData = {
+        $set: {
+            marca: requisicao.body.marca,
+            modelo: requisicao.body.modelo,
+            ano: parseInt(requisicao.body.ano),
+            qtde_disponivel: parseInt(requisicao.body.qtde_disponivel)
+        }
+    };
+
+    if (!newData.$set.marca || !newData.$set.modelo || isNaN(newData.$set.ano) || isNaN(newData.$set.qtde_disponivel) || newData.$set.qtde_disponivel < 0) {
+        return respostaCarros(resposta, 'Preencha todos os campos corretamente!', false)
+    }
+
+    colecaoCarros.updateOne(data, newData, function (err, result) {
+        if (err) {
+            console.log(err);
+            respostaCarros(resposta, 'Erro ao atualizar o carro!', false)
+        } else if (result.matchedCount == 0) {
+            respostaCarros(resposta, 'Carro não encontrado!', false)
+        } else {
+            respostaCarros(resposta, 'Carro atualizado com sucesso!', true)
+        }
+    });
+})
+
+// Delete - remover carro
+app.post('/carros/remover', function (requisicao, resposta) {
+    if (!idValido(requisicao.body.id)) {
+        return respostaCarros(resposta, 'Carro não encontrado!', false)
+    }
+    var data = { _id: new mongodb.ObjectId(requisicao.body.id) };
+    colecaoCarros.deleteOne(data, function (err, result) {
+        if (err) {
+            console.log(err);
+            respostaCarros(resposta, 'Erro ao remover o carro!', false)
+        } else if (result.deletedCount == 0) {
+            respostaCarros(resposta, 'Carro não encontrado!', false)
+        } else {
+            respostaCarros(resposta, 'Carro removido com sucesso!', true)
+        }
+    });
+})
+
+// Vender carro - diminui 1 da quantidade disponivel (so se ainda tiver no estoque)
+app.post('/carros/vender', function (requisicao, resposta) {
+    if (!idValido(requisicao.body.id)) {
+        return respostaCarros(resposta, 'Carro não encontrado!', false)
+    }
+    var data = { _id: new mongodb.ObjectId(requisicao.body.id), qtde_disponivel: { $gt: 0 } };
+    var newData = { $inc: { qtde_disponivel: -1 } };
+    colecaoCarros.updateOne(data, newData, function (err, result) {
+        if (err) {
+            console.log(err);
+            respostaCarros(resposta, 'Erro ao vender o carro!', false)
+        } else if (result.modifiedCount == 0) {
+            respostaCarros(resposta, 'Carro esgotado!', false)
+        } else {
+            resposta.redirect('/carros/gerenciar')
         }
     });
 })

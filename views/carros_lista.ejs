@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Carros Disponíveis</title>
+    <link href="/Lab10/carros.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="conteudo">
+        <div class="menu">
+            <a href="/carros/login">Login</a>
+            <a href="/carros/cadastro">Cadastro</a>
+            <a href="/Aula2/projects.html">Projetos</a>
+        </div>
+
+        <h1>Carros Disponíveis</h1>
+
+        <% if (carros.length == 0) { %>
+            <p>Nenhum carro cadastrado ainda.</p>
+        <% } else { %>
+            <table>
+                <tr>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Ano</th>
+                    <th>Quantidade disponível</th>
+                </tr>
+                <% for (var i = 0; i < carros.length; i++) { %>
+                    <tr>
+                        <td><%= carros[i].marca %></td>
+                        <td><%= carros[i].modelo %></td>
+                        <td><%= carros[i].ano %></td>
+                        <% if (carros[i].qtde_disponivel == 0) { %>
+                            <td class="esgotado">Esgotado</td>
+                        <% } else { %>
+                            <td><%= carros[i].qtde_disponivel %></td>
+                        <% } %>
+                    </tr>
+                <% } %>
+            </table>
+        <% } %>
+    </div>
+</body>
+
+</html>
