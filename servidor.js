@@ -1,6 +1,17 @@
 var http = require('http');
 var express = require('express');
 var bodyParser = require('body-parser');
+var mongodb = require("mongodb");
+
+// A string de conexao do MongoDB fica no arquivo .env (fora do GitHub, porque tem a senha do banco)
+try { process.loadEnvFile(); } catch (e) { }
+
+const MongoClient = mongodb.MongoClient;
+const uri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+
+var dbo = client.db("blog");
+var posts = dbo.collection("posts");
 
 var app = express();
 app.use(express.static('./public'));
@@ -10,9 +21,11 @@ app.use(bodyParser.json())
 app.set('view engine', 'ejs')
 app.set('views', './views');
 
+// Porta 80 (pedida no lab). Para testar em outra porta: set PORTA=8080
+var porta = process.env.PORTA || 80;
 var server = http.createServer(app);
-server.listen(80);
-console.log('Servidor rodando na porta 80');
+server.listen(porta);
+console.log('Servidor rodando na porta ' + porta);
 
 // Usuarios cadastrados (ficam na memoria enquanto o servidor estiver ligado)
 var usuarios = [];
@@ -55,4 +68,38 @@ app.post('/login', function (requisicao, resposta) {
     } else {
         resposta.render('resposta', { sucesso: false, status: 'Login ou senha incorretos!', login })
     }
+})
+
+// Lab 9 - Blog
+
+app.get('/blog', function (requisicao, resposta) {
+    posts.find({}).sort({ _id: -1 }).toArray(function (err, items) {
+        if (err) {
+            console.log(err);
+            resposta.render('blog', { posts: [], erro: 'Erro ao buscar os posts!' })
+        } else {
+            resposta.render('blog', { posts: items, erro: null })
+        }
+    });
+})
+
+app.get('/cadastrar_post', function (requisicao, resposta) {
+    resposta.redirect('Lab9/cadastrar_post.html')
+})
+
+app.post('/cadastrar_post', function (requisicao, resposta) {
+    var data = {
+        db_titulo: requisicao.body.titulo,
+        db_resumo: requisicao.body.resumo,
+        db_conteudo: requisicao.body.conteudo
+    };
+
+    posts.insertOne(data, function (err) {
+        if (err) {
+            console.log(err);
+            resposta.render('blog', { posts: [], erro: 'Erro ao cadastrar o post!' })
+        } else {
+            resposta.redirect('/blog')
+        }
+    });
 })

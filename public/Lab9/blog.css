@@ -1,0 +1,53 @@
+body {
+    background-color: #0F172A;
+    color: #F1F5F9;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 600px;
+    padding: 40px 0;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.post {
+    width: 100%;
+    background-color: #1E293B;
+    border: 1px solid #334155;
+    padding: 0 20px;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+.resumo {
+    color: #94A3B8;
+    font-style: italic;
+}
+
+.erro {
+    color: tomato;
+}
+
+input[type="submit"] {
+    padding: 8px 16px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+a {
+    color: #F1F5F9;
+    margin-top: 20px;
+}

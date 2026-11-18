@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Post</title>
+    <link href="/Lab9/blog.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="conteudo">
+        <h1>Novo Post</h1>
+
+        <form action="/cadastrar_post" method="post" class="formulario">
+            <p>Título: <input type="text" name="titulo"></p>
+            <p>Resumo: <input type="text" name="resumo"></p>
+            <p>Conteúdo:</p>
+            <textarea name="conteudo" rows="8" cols="40"></textarea>
+            <input type="submit" value="Publicar">
+        </form>
+
+        <a href="/blog">Voltar para o Blog</a>
+    </div>
+</body>
+
+</html>
